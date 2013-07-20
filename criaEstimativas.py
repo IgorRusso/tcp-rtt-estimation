@@ -1,4 +1,5 @@
 import csv
+from matplotlib.pylab import *
 import array
 
 #Vetor para guardar os RTTs medidos pelo script captura.py
@@ -11,8 +12,8 @@ SRTT2 = array.array('f')
 SRTT2.append(0)
 
 #Vetores para os timeouts calculados
-RTO1 = array.array('f');
-RTO2 = array.array('f');
+RTO1 = array.array('f')
+RTO2 = array.array('f')
 D = array.array('f')
 D.append(0)
 
@@ -59,8 +60,30 @@ def main():
         calcRTTEstimadoKarns(i)
         calcRTTEstimadoJacobs(i)
 
-        #print 'RTT:',RTT[i],' ; estimativa1: ', SRTT1[i], ', estimativa2: ',SRTT2[i]
+        #print 'RTT:',RTT[i],' ; estimativa1: ', SRTT1[i], ', estimativa2: ', SRTT2[i]
+
+    SRTT1.remove(0)
+    SRTT2.remove(0)
+
+    print len(RTT), len(SRTT1)
 
 
+    t = zeros(len(RTT))
+    for i in range(0,len(t)):
+        t[i] = i
+
+    #plot(t, RTT)
+    plot(t, RTT, 'r-')
+    hold('on')
+    plot(t, SRTT1, 'go')
+    hold('on')
+    plot(t, SRTT2, 'bo')
+
+
+    xlabel('t')
+    ylabel('y')  
+    legend(['RTT'])
+    savefig('rtts.png') # produce PNG
+    show()
 
 main()
