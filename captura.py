@@ -4,7 +4,7 @@ import re
 import time
 import array
 
-hostname = "www.ufjf.br"
+hostname = "192.168.0.6"
 
 RTT = array.array('f')
 
@@ -22,12 +22,12 @@ def run(host):
     else: 
         print 'Timeout'        
 
-for i in range(0,1000):
+for i in range(0,500):
     run(hostname)
-    time.sleep(1.0)
+    time.sleep(0.2)
     print 'Ping',i
 
-fileName = 'rttSamples.csv'
+fileName = 'rttSamplesLocal.csv'
 ofile  = open(fileName, "wb")
 writer = csv.writer(ofile)
 

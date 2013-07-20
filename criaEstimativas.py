@@ -20,7 +20,7 @@ B = 2
 
 def carregaRTTS():
     #abre o arquivo de capturas para obter os valores medidos
-    ifile  = open('rttSamples.csv', "rb")
+    ifile  = open('rttSamplesLocal.csv', "rb")
     reader = csv.reader(ifile)
 
     #carrega os valores medidos no vetor RTT
@@ -48,7 +48,6 @@ def calcRTTEstimado2(i):
         estimativa_proximo_rtt = (t1/t2)*SRTT2[k] + (1.0/t2)*RTT[k+1]
         #print k,SRTT2[k],RTT[k+1],estimativa_proximo_rtt
 
-
     SRTT2.append(estimativa_proximo_rtt)
     proximo_rto= B * estimativa_proximo_rtt
     RTO2.append(proximo_rto)
@@ -68,7 +67,7 @@ def main():
     for i in range(0,len(t)):
         t[i] = i
 
-    figure(figsize=(20, 8))
+    #figure(figsize=(20, 8))
 
     plot(t, RTT, 'r-')
     hold('on')
@@ -80,9 +79,9 @@ def main():
     ylabel('y')
 
     legend(['RTT','SRTT','TIMEOUT SRTT'])
-    savefig('srtt.png')
+    savefig('srttLocal.png')
     
-    figure(figsize=(20, 8))
+    figure()
     
     subplot(1,1,1)
 
@@ -90,13 +89,13 @@ def main():
     hold('on')
     plot(t, SRTT2, 'go')
     hold('on')  
-    plot(t, RTO2, 'g-')
+    plot(t, RTO2, 'b-')
 
     xlabel('t')
     ylabel('y')
 
     legend(['RTT','ARTT','TIMEOUT ARTT'])
-    savefig('artts.png') # produce PNG
+    savefig('arttsLocal.png') # produce PNG
 
     show()
 
