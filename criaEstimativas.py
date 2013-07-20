@@ -18,6 +18,7 @@ D = array.array('f')
 D.append(0)
 
 
+
 A = 0.85
 B = 2
 
