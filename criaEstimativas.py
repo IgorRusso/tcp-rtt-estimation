@@ -14,10 +14,6 @@ SRTT2.append(0)
 #Vetores para os timeouts calculados
 RTO1 = array.array('f')
 RTO2 = array.array('f')
-D = array.array('f')
-D.append(0)
-
-
 
 A = 0.85
 B = 2
@@ -28,29 +24,35 @@ def carregaRTTS():
     reader = csv.reader(ifile)
 
     #carrega os valores medidos no vetor RTT
-    for row in reader:    
+    for row in reader:
         rtt = float(row[0])
         RTT.append(rtt)   
 
     ifile.close()
 
-def calcRTTEstimadoKarns(i):
+def calcRTTEstimado1(i):
     estimativa_proximo_rtt = (A)*SRTT1[i] + (1-A)*RTT[i]
     SRTT1.append(estimativa_proximo_rtt)
     proximo_rto= B * estimativa_proximo_rtt
     RTO1.append(proximo_rto)    
 
-def calcRTTEstimadoJacobs(i):
-    g = 0.125
-    h = 0.25
-    erro = RTT[i] - SRTT2[i];    
-    estimativa_proximo_rtt = SRTT2[i] + g*erro
-    SRTT2.append(estimativa_proximo_rtt);
-    proximo_d = D[i] + h*(abs(erro)- D[i])
-    D.append(proximo_d);
+def calcRTTEstimado2(i):
+    
+    if (i==0):
+       estimativa_proximo_rtt = 0
+    else:
+        k = i-1;     
+        
+        t1 = float(k)
+        t2 = t1+1
+        estimativa_proximo_rtt = (t1/t2)*SRTT2[k] + (1.0/t2)*RTT[k+1]
+        print k,SRTT2[k],RTT[k+1],estimativa_proximo_rtt
 
-    proximo_rto = estimativa_proximo_rtt +4*proximo_d;
-    RTO2.append(proximo_rto);
+
+
+    SRTT2.append(estimativa_proximo_rtt)
+    proximo_rto= B * estimativa_proximo_rtt
+    RTO2.append(proximo_rto)
 
 
 def main():
@@ -58,32 +60,27 @@ def main():
     #print RTT
 
     for i in range(0, len(RTT)):        
-        calcRTTEstimadoKarns(i)
-        calcRTTEstimadoJacobs(i)
+        calcRTTEstimado1(i)
+        calcRTTEstimado2(i)
 
         #print 'RTT:',RTT[i],' ; estimativa1: ', SRTT1[i], ', estimativa2: ', SRTT2[i]
 
     SRTT1.remove(0)
     SRTT2.remove(0)
 
-    print len(RTT), len(SRTT1)
-
-
     t = zeros(len(RTT))
     for i in range(0,len(t)):
         t[i] = i
 
-    #plot(t, RTT)
     plot(t, RTT, 'r-')
     hold('on')
-    plot(t, SRTT1, 'go')
+    plot(t, SRTT1, 'bo')
     hold('on')
-    plot(t, SRTT2, 'bo')
-
+    plot(t, SRTT2, 'go')
 
     xlabel('t')
     ylabel('y')  
-    legend(['RTT'])
+    legend(['RTT','ARTT','SRTT'])
     savefig('rtts.png') # produce PNG
     show()
 

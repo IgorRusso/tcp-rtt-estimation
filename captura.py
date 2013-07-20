@@ -22,7 +22,7 @@ def run(host):
     else: 
         print 'Timeout'        
 
-for i in range(0,100):
+for i in range(0,400):
     run(hostname)
     time.sleep(0.4)
     print 'Ping',i
