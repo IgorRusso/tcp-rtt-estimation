@@ -56,7 +56,7 @@ def calcRTTEstimado2(i):
 
 def main():
     carregaRTTS()
-    
+    print len(RTT)
     for i in range(0, len(RTT)):        
         calcRTTEstimado1(i)
         calcRTTEstimado2(i)
@@ -67,6 +67,8 @@ def main():
     t = zeros(len(RTT))
     for i in range(0,len(t)):
         t[i] = i
+
+    figure(figsize=(20, 8))
 
     plot(t, RTT, 'r-')
     hold('on')
@@ -80,8 +82,9 @@ def main():
     legend(['RTT','SRTT','TIMEOUT SRTT'])
     savefig('srtt.png')
     
-    figure()
-    subplot(2,1,2)
+    figure(figsize=(20, 8))
+    
+    subplot(1,1,1)
 
     plot(t, RTT, 'r-')
     hold('on')
