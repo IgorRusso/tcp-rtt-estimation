@@ -11,10 +11,14 @@ SRTT2 = array.array('f')
 SRTT2.append(0)
 
 #Vetores para os timeouts calculados
-timeout1 = array.array('f');
-timeout2 = array.array('f');
+RTO1 = array.array('f');
+RTO2 = array.array('f');
+D = array.array('f')
+D.append(0)
 
-a = 0.85
+
+A = 0.85
+B = 2
 
 def carregaRTTS():
     #abre o arquivo de capturas para obter os valores medidos
@@ -28,16 +32,23 @@ def carregaRTTS():
 
     ifile.close()
 
-
 def calcRTTEstimadoKarns(i):
-    estimativa_proximo_rtt = (a)*SRTT1[i] + (1-a)*RTT[i]
+    estimativa_proximo_rtt = (A)*SRTT1[i] + (1-A)*RTT[i]
     SRTT1.append(estimativa_proximo_rtt)
-    timeout1.append(1)
+    proximo_rto= B * estimativa_proximo_rtt
+    RTO1.append(proximo_rto)    
 
 def calcRTTEstimadoJacobs(i):
-    estimativa_proximo_rtt = (a)*SRTT2[i] + (1-a)*RTT[i]
-    SRTT2.append(estimativa_proximo_rtt)
-    timeout2.append(1)
+    g = 0.125
+    h = 0.25
+    erro = RTT[i] - SRTT2[i];    
+    estimativa_proximo_rtt = SRTT2[i] + g*erro
+    SRTT2.append(estimativa_proximo_rtt);
+    proximo_d = D[i] + h*(abs(erro)- D[i])
+    D.append(proximo_d);
+
+    proximo_rto = estimativa_proximo_rtt +4*proximo_d;
+    RTO2.append(proximo_rto);
 
 
 def main():
@@ -48,9 +59,7 @@ def main():
         calcRTTEstimadoKarns(i)
         calcRTTEstimadoJacobs(i)
 
-        print 'RTT:',RTT[i],' ; estimativa1: ', SRTT1[i], ', estimativa2: ',SRTT2[i]
-
-
+        #print 'RTT:',RTT[i],' ; estimativa1: ', SRTT1[i], ', estimativa2: ',SRTT2[i]
 
 
 
