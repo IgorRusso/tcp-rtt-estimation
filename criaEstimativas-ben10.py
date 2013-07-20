@@ -1,6 +1,7 @@
 import csv
 from matplotlib.pylab import *
 import array
+import re
 
 #Vetor para guardar os RTTs medidos pelo script captura.py
 RTT = array.array('f')
@@ -20,12 +21,15 @@ B = 2
 
 def carregaRTTS():
     #abre o arquivo de capturas para obter os valores medidos
-    ifile  = open('rttSamples.csv', "rb")
-    reader = csv.reader(ifile)
+    ifile  = open('a.log', "rb")
+    reader = csv.reader(ifile, delimiter='\t')
 
     #carrega os valores medidos no vetor RTT
     for row in reader:
-        rtt = float(row[0])
+        #print row
+        teste = str(row[1])
+        rtt = float(teste[5:])
+        #print rtt
         RTT.append(rtt)   
 
     ifile.close()
@@ -46,7 +50,7 @@ def calcRTTEstimado2(i):
         t1 = float(k)
         t2 = t1+1
         estimativa_proximo_rtt = (t1/t2)*SRTT2[k] + (1.0/t2)*RTT[k+1]
-        #print k,SRTT2[k],RTT[k+1],estimativa_proximo_rtt
+        print k,SRTT2[k],RTT[k+1],estimativa_proximo_rtt
 
 
     SRTT2.append(estimativa_proximo_rtt)
@@ -56,7 +60,8 @@ def calcRTTEstimado2(i):
 
 def main():
     carregaRTTS()
-    
+    #print RTT
+
     for i in range(0, len(RTT)):        
         calcRTTEstimado1(i)
         calcRTTEstimado2(i)
@@ -78,10 +83,10 @@ def main():
     ylabel('y')
 
     legend(['RTT','SRTT','TIMEOUT SRTT'])
-    savefig('srtt.png')
+    savefig('srtt.png') # produce PNG
     
     figure()
-    subplot(2,1,2)
+    subplot(2,1,1)
 
     plot(t, RTT, 'r-')
     hold('on')
@@ -93,8 +98,10 @@ def main():
     ylabel('y')
 
     legend(['RTT','ARTT','TIMEOUT ARTT'])
-    savefig('artts.png') # produce PNG
+    savefig('artt.png') # produce PNG
 
     show()
+
+   
 
 main()

@@ -22,9 +22,9 @@ def run(host):
     else: 
         print 'Timeout'        
 
-for i in range(0,400):
+for i in range(0,500):
     run(hostname)
-    time.sleep(0.4)
+    time.sleep(1.0)
     print 'Ping',i
 
 fileName = 'rttSamples.csv'
