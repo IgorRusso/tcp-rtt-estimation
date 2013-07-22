@@ -4,7 +4,7 @@ import re
 import time
 import array
 
-hostname = "192.168.0.6"
+hostname = "www.ufjf.br"
 
 RTT = array.array('f')
 
