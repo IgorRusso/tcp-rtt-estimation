@@ -27,7 +27,7 @@ for i in range(0,500):
     time.sleep(0.2)
     print 'Ping',i
 
-fileName = 'rttSamplesLocal.csv'
+fileName = 'rttSamples.csv'
 ofile  = open(fileName, "wb")
 writer = csv.writer(ofile)
 
